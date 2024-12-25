@@ -2,14 +2,21 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
+string testFunc = "test8";
+if (args.Length > 0)
+{
+    testFunc = args[0];
+}
+
 string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Pride and Prejudice.txt");
 string text = File.ReadAllText(path);
+string[] daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 Dictionary<string, int> frequency = [];
 var lookup = frequency.GetAlternateLookup<ReadOnlySpan<char>>();
 
 Stopwatch sw = new();
-while (true)
+for (var i = 0; i < 10; i++)
 {
     long mem = GC.GetTotalAllocatedBytes();
     sw.Restart();
@@ -20,46 +27,71 @@ while (true)
 
     for (var trial = 0; trial < 10; trial++)
     {
-        //foreach (Match match in regex.Matches(text))
-        //{
-        //    string word = match.Value;
-        //    frequency[word] = frequency.TryGetValue(word, out int count) ? count + 1 : 1;
-        //}
-
-        //foreach (var m in regex.EnumerateMatches(text))
-        //{
-        //    string word = text.Substring(m.Index,m.Length);
-        //    frequency[word] = frequency.TryGetValue(word, out int count) ? count + 1 : 1;
-        //}
-
-        //foreach (var m in regexWord.EnumerateMatches(text))
-        //{
-        //    var word = text.AsSpan(m.Index, m.Length);
-        //    lookup[word] = lookup.TryGetValue(word, out int count) ? count + 1 : 1;
-        //}
-
-        //foreach (var m in regexSpace.Split(text))
-        //{
-        //    var word = m;
-        //    lookup[word] = lookup.TryGetValue(word, out int count) ? count + 1 : 1;
-        //}
-
-        //foreach (var m in regexSpace.EnumerateSplits(text))
-        //{
-        //    var word = text[m];
-        //    lookup[word] = lookup.TryGetValue(word, out int count) ? count + 1 : 1;
-        //}
-
-        //foreach (var m in regexSpace.EnumerateSplits(text))
-        //{
-        //    var word = text.AsSpan(m);
-        //    lookup[word] = lookup.TryGetValue(word, out int count) ? count + 1 : 1;
-        //}
-
-        foreach (var m in text.AsSpan().Split(' '))
+        switch (testFunc)
         {
-            var word = text.AsSpan(m);
-            lookup[word] = lookup.TryGetValue(word, out int count) ? count + 1 : 1;
+            case "test1":
+                foreach (Match match in regexWord.Matches(text))
+                {
+                    string word = match.Value;
+                    frequency[word] = frequency.TryGetValue(word, out int count) ? count + 1 : 1;
+                }
+                break;
+            case "test2":
+                foreach (var m in regexWord.EnumerateMatches(text))
+                {
+                    string word = text.Substring(m.Index, m.Length);
+                    frequency[word] = frequency.TryGetValue(word, out int count) ? count + 1 : 1;
+                }
+                break;
+            case "test3":
+                foreach (var m in regexWord.EnumerateMatches(text))
+                {
+                    var word = text.AsSpan(m.Index, m.Length);
+                    lookup[word] = lookup.TryGetValue(word, out int count) ? count + 1 : 1;
+                }
+                break;
+            case "test4":
+                foreach (var m in regexSpace.Split(text))
+                {
+                    var word = m;
+                    lookup[word] = lookup.TryGetValue(word, out int count) ? count + 1 : 1;
+                }
+                break;
+            case "test5":
+                foreach (var m in regexSpace.EnumerateSplits(text))
+                {
+                    var word = text[m];
+                    lookup[word] = lookup.TryGetValue(word, out int count) ? count + 1 : 1;
+                }
+                break;
+            case "test6":
+                foreach (var m in regexSpace.EnumerateSplits(text))
+                {
+                    var word = text.AsSpan(m);
+                    lookup[word] = lookup.TryGetValue(word, out int count) ? count + 1 : 1;
+                }
+                break;
+            case "test7":
+                foreach (var m in text.AsSpan().Split(' '))
+                {
+                    var word = text.AsSpan(m);
+                    lookup[word] = lookup.TryGetValue(word, out int count) ? count + 1 : 1;
+                }
+                break;
+            case "test8":
+                int c = 0;
+                for(int j = 0;j< text.Length; j++)
+                {
+                    foreach (var dow in daysOfWeek)
+                    {
+                        if (text.Substring(i).StartsWith(dow))
+                        {
+                            c++;
+                            break;
+                        }
+                    }
+                }
+                break;
         }
     }
     sw.Stop();
